@@ -80,7 +80,65 @@ public class ImageProcess {
 	public static Meterial renderImage(Meterial renderImage,
 			ArrayList<Meterial> meterial_list) {
 
-		
+		Meterial result = new Meterial(), m;
+		int Xmin = renderImage.x, Xmax = renderImage.x + renderImage.width, Ymin = renderImage.y, Ymax = renderImage.y
+				+ renderImage.height;
+		for (Iterator<Meterial> it = meterial_list.iterator(); it.hasNext();) {
+			m = (Meterial) it.next();
+			if (m.x < Xmin) {
+				Xmin = m.x;
+			}
+			if (m.x + m.width > Xmax) {
+				Xmax = m.x + m.width;
+			}
+			if (m.y < Ymin) {
+				Ymin = m.y;
+			}
+			if (m.y + m.height > Ymax) {
+				Ymax = m.y + m.height;
+			}
+		}
+		result.x = Xmin;
+		result.y = Ymin;
+		result.height = Ymax - Ymin;
+		result.width = Xmax - Xmin;
+		result.pixels = new int[result.height * result.width];
+		for (int i = 0; i < result.height * result.width; i++) {
+			result.pixels[i] = 255 << 24 | 255 << 16 | 255 << 8 | 255;
+		}
+		int y0 = renderImage.y;
+		int x0 = renderImage.x;
+		for (int i = 0; i < renderImage.height * renderImage.width; i++) {
+			int rgb = (y0 - result.y) * result.width + x0 - result.x;
+			result.pixels[rgb] = renderImage.pixels[i];
+			x0++;
+			if (x0 >= renderImage.width + renderImage.x) {
+				x0 = x0 - renderImage.width;
+				y0++;
+			}
+		}
+
+		for (Iterator<Meterial> it = meterial_list.iterator(); it.hasNext();) {
+			m = (Meterial) it.next();
+			y0 = m.y;
+			x0 = m.x;
+			for (int i = 0; i < m.height * m.width; i++) {
+				int rgb = (y0 - result.y) * result.width + x0-result.x;
+				int alpha = (m.pixels[i] & 0xff000000) >> 24;
+			    alpha = alpha & 0x000000ff;
+				if (alpha == 255) {
+					result.pixels[rgb] = m.pixels[i];
+				} else {
+					// Nothing
+				}
+				x0++;
+				if (x0 >= m.width + m.x) {
+					x0 = x0 - m.width;
+					y0++;
+				}
+			}
+		}
+		return result;
 	}
 
 }
