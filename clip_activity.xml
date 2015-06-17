@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffcbcfd3"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/image_view2"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:contentDescription="@string/content_discription" />
+
+    <com.panwenyou.moodpicture.ClipView
+        android:id="@+id/clip_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+    </com.panwenyou.moodpicture.ClipView>
+
+</RelativeLayout>
